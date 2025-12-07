@@ -1,19 +1,44 @@
 spring:
   application:
     name: camunda-study
+  datasource:
+    url: jdbc:mysql://localhost:3306/camunda_db?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 20           # 连接池配置
+      minimum-idle: 5
+      transaction-isolation: TRANSACTION_READ_COMMITTED
 #  datasource:
-#    url: jdbc:mysql://localhost:3306/camunda_db?useUnicode=true&characterEncoding=utf8
-#    username: root
-#    password: 123456
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-
+#    url: jdbc:h2:mem:camunda;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+#    driver-class-name: org.h2.Driver
+#    username: admin
+#    password:
+#  h2:
+#    console:
+#      enabled: true
+#      path: /h2
 server:
   port: 8080
 
 camunda.bpm:
+  database:
+    type: mysql
+    schema-update:  true
   admin-user:
     id: demo
     password: demo
     firstName: Demo
   filter:
     create: All tasks
+  auto-deployment-enabled: true
+  deployment-resource-pattern: classpath*:**/*.bpmn
+
+
+
+# 日志配置（可选，用于调试）
+logging:
+  level:
+    org.camunda: INFO
+    com.zaxxer.hikari: DEBUG
