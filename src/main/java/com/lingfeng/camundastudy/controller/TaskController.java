@@ -12,11 +12,4 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/task")
 public class TaskController {
 
-    @Resource
-    private RuntimeService runtimeService;
-
-    @EventListener
-    private void processPostDeploy(PostDeployEvent event) {
-        runtimeService.startProcessInstanceByKey("diagram_1");
-    }
 }
