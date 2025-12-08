@@ -87,12 +87,29 @@
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${org.springdoc.version}</version>
         </dependency>
-        <!--fastjson-->
+        <!--fastjson2 (支持 Jakarta EE)-->
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.76</version>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>2.0.43</version>
         </dependency>
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2-extension-spring6</artifactId>
+            <version>2.0.43</version>
+        </dependency>
+        <!-- Jakarta RS API (JAX-RS) for Jersey -->
+        <dependency>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+        <!-- JAX-RS API (旧版 javax.ws.rs) for Camunda compatibility -->
+<!--        <dependency>-->
+<!--            <groupId>javax.ws.rs</groupId>-->
+<!--            <artifactId>javax.ws.rs-api</artifactId>-->
+<!--            <version>2.1.1</version>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
