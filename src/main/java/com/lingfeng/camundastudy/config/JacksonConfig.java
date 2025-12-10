@@ -1,7 +1,6 @@
 package com.lingfeng.camundastudy.config;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.alibaba.fastjson2.util.JSONObject1O;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.Module;
@@ -39,9 +38,17 @@ public class JacksonConfig {
         module.addSerializer(BaseCodeEnum.class, new JsonSerializer<BaseCodeEnum>() {
             @Override
             public void serialize(BaseCodeEnum value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-                String jsonString = JSONObject.toJSONString(value);
-                // 统一写出 code 值
-                gen.writeNumber(jsonString);
+                // 将枚举序列化为包含所有属性的 JSON 对象
+                gen.writeStartObject();
+                gen.writeNumberField("code", value.getCode());
+                gen.writeStringField("desc", value.getDesc());
+                // 添加枚举名称
+                gen.writeStringField("enumName", ((Enum<?>) value).name());
+                gen.writeEndObject();
+
+//                String jsonString = JSONObject.toJSONString(value);
+//                // 统一写出 code 值
+//                gen.writeNumber(jsonString);
             }
         });
 
