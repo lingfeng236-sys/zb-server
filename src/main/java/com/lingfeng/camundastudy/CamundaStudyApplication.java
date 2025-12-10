@@ -20,8 +20,8 @@ public class CamundaStudyApplication {
         SpringApplication.run(CamundaStudyApplication.class, args);
     }
 
-    @EventListener
-    private void processPostDeploy(PostDeployEvent event) {
-        runtimeService.startProcessInstanceByKey("loanApproval");
-    }
+//    @EventListener
+//    private void processPostDeploy(PostDeployEvent event) {
+//        runtimeService.startProcessInstanceByKey("loanApproval");
+//    }
 }
