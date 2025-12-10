@@ -4,6 +4,7 @@ import com.lingfeng.camundastudy.common.constant.CommonStateCode;
 import com.lingfeng.camundastudy.common.exception.BizException;
 import com.lingfeng.camundastudy.convert.UserConvert;
 import com.lingfeng.camundastudy.dao.repo.UserRepo;
+import com.lingfeng.camundastudy.domain.dto.user.UserDto;
 import com.lingfeng.camundastudy.domain.dto.user.UserSaveDto;
 import com.lingfeng.camundastudy.domain.entity.UserEntity;
 import jakarta.annotation.Resource;
@@ -58,5 +59,10 @@ public class UserService {
         UserEntity userEntity = userConvert.UserSaveDto2Entity(userSaveDto);
         // 实际存储前请加密密码：user.setPassword(encode(user.getPassword()));
         userRepo.save(userEntity);
+    }
+
+    public UserDto detail(Long id) {
+        UserEntity userEntity = userRepo.getById(id);
+        return userConvert.userEntity2Dto(userEntity);
     }
 }

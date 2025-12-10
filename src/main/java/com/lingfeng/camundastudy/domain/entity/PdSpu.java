@@ -1,7 +1,7 @@
 package com.lingfeng.camundastudy.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import com.lingfeng.camundastudy.common.domain.NewBaseEntity;
+import com.lingfeng.camundastudy.common.domain.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @TableName(value = "pd_spu")
 @Schema(description = "SPU表")
-public class PdSpu extends NewBaseEntity {
+public class PdSpu extends BaseEntity {
 
     @TableId(type = IdType.AUTO)
     private Long id;

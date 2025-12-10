@@ -11,10 +11,15 @@ public enum GenderEnum implements BaseCodeEnum {
     FEMALE(2, "女");
 
     private final Integer code;
-    private final String text;
+    private final String desc;
 
     @Override
     public Integer getCode() {
         return this.code;
+    }
+
+    @Override
+    public String getDesc() {
+        return this.desc;
     }
 }

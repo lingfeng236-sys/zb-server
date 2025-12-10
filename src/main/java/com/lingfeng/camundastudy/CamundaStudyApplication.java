@@ -12,7 +12,6 @@ import org.springframework.context.event.EventListener;
 
 @SpringBootApplication
 //@EnableProcessApplication
-@MapperScan("com.lingfeng.camundastudy.dao.mapper")
 public class CamundaStudyApplication {
 
     @Resource

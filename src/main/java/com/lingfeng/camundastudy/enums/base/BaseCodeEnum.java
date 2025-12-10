@@ -7,4 +7,6 @@ package com.lingfeng.camundastudy.enums.base;
 public interface BaseCodeEnum {
     // 获取存入数据库的值（这里假设是 Integer，也可以是 String）
     Integer getCode();
+    // 获取枚举的描述
+    String getDesc();
 }

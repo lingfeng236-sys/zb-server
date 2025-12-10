@@ -2,6 +2,7 @@ package com.lingfeng.camundastudy.controller.user;
 
 
 import com.lingfeng.camundastudy.common.domain.Result;
+import com.lingfeng.camundastudy.domain.dto.user.UserDto;
 import com.lingfeng.camundastudy.domain.dto.user.UserSaveDto;
 import com.lingfeng.camundastudy.domain.entity.UserEntity;
 import com.lingfeng.camundastudy.service.user.UserService;
@@ -34,6 +35,12 @@ public class UserController {
         return Result.ok();
     }
 
+    // 3. 查询单个用户 (Retrieve One)
+    @GetMapping("/get/{id}")
+    public Result<UserDto> detail(@PathVariable Long id) {
+        return Result.ok(userService.detail(id));
+    }
+
     /*// 3. 删除用户 (Delete)
     @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
@@ -48,11 +55,7 @@ public class UserController {
         return success ? "修改成功" : "修改失败";
     }
 
-    // 5. 查询单个用户 (Retrieve One)
-    @GetMapping("/get/{id}")
-    public User get(@PathVariable Long id) {
-        return userService.getById(id);
-    }
+
 
     // 6. 查询所有用户 (Retrieve All)
     @GetMapping("/list")

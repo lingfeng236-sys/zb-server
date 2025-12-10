@@ -13,7 +13,6 @@ import java.sql.SQLException;
 /**
  * 敏感数据加密处理器
  */
-@MappedTypes(String.class)
 public class EncryptTypeHandler extends BaseTypeHandler<String> {
 
     @Override
