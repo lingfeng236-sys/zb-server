@@ -28,7 +28,7 @@ public class UserController {
 
     // 2. 新增用户
     @PostMapping("/register")
-    public Result<Boolean> add(@RequestBody UserSaveDto userSaveDto) {
+    public Result<Boolean> register(@RequestBody UserSaveDto userSaveDto) {
 
         userService.register(userSaveDto);
         return Result.ok();

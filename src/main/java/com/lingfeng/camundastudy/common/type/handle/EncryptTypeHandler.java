@@ -1,8 +1,9 @@
-package com.lingfeng.camundastudy.common.type.handle.global;
+package com.lingfeng.camundastudy.common.type.handle;
 
 import com.lingfeng.camundastudy.common.util.EncryptUtil;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
+import org.apache.ibatis.type.MappedTypes;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
@@ -12,6 +13,7 @@ import java.sql.SQLException;
 /**
  * 敏感数据加密处理器
  */
+@MappedTypes(String.class)
 public class EncryptTypeHandler extends BaseTypeHandler<String> {
 
     @Override

@@ -2,6 +2,7 @@ package com.lingfeng.camundastudy.service.user;
 
 import com.lingfeng.camundastudy.common.constant.CommonStateCode;
 import com.lingfeng.camundastudy.common.exception.BizException;
+import com.lingfeng.camundastudy.convert.UserConvert;
 import com.lingfeng.camundastudy.dao.repo.UserRepo;
 import com.lingfeng.camundastudy.domain.dto.user.UserSaveDto;
 import com.lingfeng.camundastudy.domain.entity.UserEntity;
@@ -13,6 +14,10 @@ public class UserService {
 
     @Resource
     private UserRepo userRepo;
+
+    @Resource
+    private UserConvert  userConvert;
+
     /**
      * 登录功能
      */
@@ -42,15 +47,16 @@ public class UserService {
      * 新增用户（注册）
      */
     public void register(UserSaveDto userSaveDto) {
-        /*// 检查用户名是否重复
-        long count = this.count(new LambdaQueryWrapper<UserEntity>()
-                .eq(User::getUsername, user.getUsername()));
-        if (count > 0) {
-            throw new RuntimeException("用户名已存在");
+
+        // 检查用户名是否重复
+        UserEntity existingUser = userRepo.getByUsername(userSaveDto.getUsername());
+        if (existingUser != null) {
+            throw new BizException(CommonStateCode.USER_ALREADY_EXIST);
         }
         
-        user.setCreateTime(LocalDateTime.now());
+        // 使用 MapStruct 映射器转换 DTO 到 Entity
+        UserEntity userEntity = userConvert.UserSaveDto2Entity(userSaveDto);
         // 实际存储前请加密密码：user.setPassword(encode(user.getPassword()));
-        return this.save(user);*/
+        userRepo.save(userEntity);
     }
 }
