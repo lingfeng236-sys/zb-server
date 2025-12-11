@@ -1,4 +1,4 @@
-package com.lingfeng.camundastudy.controller;
+package com.lingfeng.camundastudy.controller.camunda;
 
 import com.lingfeng.camundastudy.common.domain.Result;
 import com.lingfeng.camundastudy.service.ProcessService;

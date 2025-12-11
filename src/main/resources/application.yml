@@ -52,7 +52,11 @@ camunda.bpm:
     firstName: Demo
   filter:
     create: All tasks
-#  auto-deployment-enabled: false
+  generic-properties:
+    properties:
+      # 设置历史数据保留 30 天 (ISO 8601 格式)
+      historyTimeToLive: P30D
+  #  auto-deployment-enabled: false
   #deployment-resource-pattern: classpath*:**/*.bpmn
 
 
