@@ -16,7 +16,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         this.strictInsertFill(metaObject, "updateTime", Date.class, new Date());
         
         // 自动填充删除标记，默认为 "0"
-        this.strictInsertFill(metaObject, "delFlag", String.class, "0");
+        this.strictInsertFill(metaObject, "delFlag", Integer.class, 0);
         
         // 这里的 userId 需要你从具体的上下文中获取（如 Spring Security / Sa-Token）
         // this.strictInsertFill(metaObject, "createBy", String.class, "admin"); 

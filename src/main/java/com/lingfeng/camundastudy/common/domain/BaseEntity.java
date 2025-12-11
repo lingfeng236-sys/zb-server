@@ -53,6 +53,6 @@ public class BaseEntity implements Serializable {
 
     @TableField(value = "del_flag", fill = FieldFill.INSERT)
     @Schema(description = "删除标志")
-    private String delFlag;
+    private Integer delFlag;
 
 }
