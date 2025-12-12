@@ -20,4 +20,23 @@ public class HelloController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return "当前登录用户: " + auth.getName() + ", 权限: " + auth.getAuthorities();
     }
+
+
+    // 1. 公开接口
+    @GetMapping("/public/info")
+    public String publicInfo() {
+        return "这是公开信息，大家都能看";
+    }
+
+    // 2. 普通接口（需要登录）
+    @GetMapping("/home")
+    public String home() {
+        return "欢迎来到主页（只要登录就能看）";
+    }
+
+    // 3. 管理员接口
+    @GetMapping("/admin/data")
+    public String adminData() {
+        return "这是管理员机密数据！";
+    }
 }

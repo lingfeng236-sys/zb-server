@@ -19,5 +19,4 @@ public class HealthCheckController {
         return "{\"status\":\"UP\"}";
     }
 
-
 }
