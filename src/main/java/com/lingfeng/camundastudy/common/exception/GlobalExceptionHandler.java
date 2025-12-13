@@ -68,11 +68,11 @@ public class GlobalExceptionHandler {
      * 处理 Spring Security 认证异常 (401)
      * 注意：方法级权限校验抛出的异常会被这里捕获
      */
-    @ExceptionHandler(AuthenticationException.class)
+    /*@ExceptionHandler(AuthenticationException.class)
     public Result<String> handleAuthenticationException(AuthenticationException exception) {
         log.warn("认证失败", exception);
         return Result.forbidden(null);
-    }
+    }*/
 
     /**
      * 处理 Spring Security 6.x 授权异常 (403)
