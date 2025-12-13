@@ -1,16 +1,17 @@
 package com.lingfeng.camundastudy.enums.user;
 
+import com.lingfeng.camundastudy.common.constant.RoleConst;
 import com.lingfeng.camundastudy.enums.base.BaseCodeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.security.core.GrantedAuthority;
 
 @Getter
 @AllArgsConstructor
 public enum RoleEnum implements BaseCodeEnum {
 
-    USER(1, "USER"),
-    ADMIN(2, "ADMIN");
+    ADMIN(1, RoleConst.ADMIN),
+    USER(2, RoleConst.USER),
+    ;
     private final Integer code;
     private final String role;
 

@@ -9,11 +9,14 @@ import com.lingfeng.camundastudy.domain.dto.user.UserDto;
 import com.lingfeng.camundastudy.domain.dto.user.UserSaveDto;
 import com.lingfeng.camundastudy.domain.entity.UserEntity;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class UserService {
 
     @Resource
@@ -49,10 +52,7 @@ public class UserService {
     public void register(UserSaveDto userSaveDto) {
 
         // 检查用户名是否重复
-        UserEntity existingUser = userRepo.getByUsername(userSaveDto.getUsername());
-        if (existingUser != null) {
-            throw new BizException(CommonStateCode.USER_ALREADY_EXIST);
-        }
+        UserEntity existingUser = userRepo.findByUsername(userSaveDto.getUsername()).orElseThrow(() -> new BizException(CommonStateCode.USER_ALREADY_EXIST));
 
         // 使用 MapStruct 映射器转换 DTO 到 Entity
         UserEntity userEntity = userConvert.UserSaveDto2Entity(userSaveDto);

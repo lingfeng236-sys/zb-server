@@ -1,6 +1,7 @@
 package com.lingfeng.camundastudy.controller.user;
 
 
+import com.lingfeng.camundastudy.common.annotation.security.IsOwnerOrAdmin;
 import com.lingfeng.camundastudy.common.domain.Result;
 import com.lingfeng.camundastudy.domain.dto.user.UserDto;
 import com.lingfeng.camundastudy.domain.dto.user.UserSaveDto;
@@ -16,6 +17,15 @@ public class UserController {
 
     @Resource
     private UserService userService;
+
+
+    // 场景：修改用户密码
+    // 只有管理员，或者用户自己（username匹配）才能修改
+    @IsOwnerOrAdmin
+    @PutMapping("/updatePassword")
+    public Result<Boolean> updatePassword(@RequestParam String username, @RequestParam String newPwd) {
+        return Result.ok();
+    }
 
     // 1. 登录接口
     @PostMapping("/login")
