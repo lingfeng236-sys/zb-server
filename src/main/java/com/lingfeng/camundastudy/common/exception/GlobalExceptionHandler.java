@@ -7,6 +7,9 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -59,6 +62,36 @@ public class GlobalExceptionHandler {
     public Result<String> handleBizException(BizException exception) {
         log.warn("biz exception", exception);
         return Result.newFailedResult(exception.getErrCode(), exception.getMessage());
+    }
+
+    /**
+     * 处理 Spring Security 认证异常 (401)
+     * 注意：方法级权限校验抛出的异常会被这里捕获
+     */
+    @ExceptionHandler(AuthenticationException.class)
+    public Result<String> handleAuthenticationException(AuthenticationException exception) {
+        log.warn("认证失败", exception);
+        return Result.forbidden(null);
+    }
+
+    /**
+     * 处理 Spring Security 6.x 授权异常 (403)
+     * Spring Security 6.x 使用 AuthorizationDeniedException 替代了 AccessDeniedException
+     */
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public Result<String> handleAuthorizationDeniedException(AuthorizationDeniedException exception) {
+        log.warn("权限不足: {}", exception.getMessage());
+        return Result.forbidden(null);
+    }
+
+    /**
+     * 处理 Spring Security 旧版授权异常 (403)
+     * 兼容处理，以防某些地方还在使用旧的异常类型
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    public Result<String> handleAccessDeniedException(AccessDeniedException exception) {
+        log.warn("权限不足: {}", exception.getMessage());
+        return Result.forbidden(null);
     }
 
     /**

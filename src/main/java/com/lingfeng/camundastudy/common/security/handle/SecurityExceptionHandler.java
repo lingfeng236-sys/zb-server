@@ -27,7 +27,7 @@ public class SecurityExceptionHandler implements AuthenticationEntryPoint, Acces
         response.getWriter().write(objectMapper.writeValueAsString(result));
     }
 
-    // 处理 403 (无权限)
+    // 处理 403 (无权限) - Filter 层异常
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
         response.setContentType("application/json;charset=UTF-8");
