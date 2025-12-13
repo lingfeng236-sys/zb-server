@@ -38,7 +38,7 @@ public class UserController {
     }
 
     // 2. 新增用户
-    @IsUserOrAdmin
+//    @IsUserOrAdmin 加了这个注解，必须要有token
     @PostMapping("/register")
     public Result<Boolean> register(@RequestBody @Valid UserSaveDto userSaveDto) {
         userService.register(userSaveDto);

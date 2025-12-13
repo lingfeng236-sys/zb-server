@@ -80,7 +80,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(AuthorizationDeniedException.class)
     public Result<String> handleAuthorizationDeniedException(AuthorizationDeniedException exception) {
-        log.warn("权限不足: {}", exception.getMessage());
+        log.error("权限不足: ", exception);
         return Result.forbidden(null);
     }
 
@@ -90,7 +90,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(AccessDeniedException.class)
     public Result<String> handleAccessDeniedException(AccessDeniedException exception) {
-        log.warn("权限不足: {}", exception.getMessage());
+        log.error("权限不足: ", exception);
         return Result.forbidden(null);
     }
 
