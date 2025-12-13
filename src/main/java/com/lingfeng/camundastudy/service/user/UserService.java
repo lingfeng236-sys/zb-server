@@ -20,7 +20,7 @@ public class UserService {
     private UserRepo userRepo;
 
     @Resource
-    private UserConvert  userConvert;
+    private UserConvert userConvert;
 
     @Resource
     private AuthenticationManager authenticationManager;
@@ -31,7 +31,7 @@ public class UserService {
      * 登录功能
      */
     public String login(UserSaveDto userSaveDto) {
-// 1. 创建认证令牌
+        // 1. 创建认证令牌
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(userSaveDto.getUsername(), userSaveDto.getPassword());
 
@@ -53,7 +53,7 @@ public class UserService {
         if (existingUser != null) {
             throw new BizException(CommonStateCode.USER_ALREADY_EXIST);
         }
-        
+
         // 使用 MapStruct 映射器转换 DTO 到 Entity
         UserEntity userEntity = userConvert.UserSaveDto2Entity(userSaveDto);
         // 实际存储前请加密密码：user.setPassword(encode(user.getPassword()));

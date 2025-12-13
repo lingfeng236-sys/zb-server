@@ -5,11 +5,13 @@ import com.lingfeng.camundastudy.common.domain.Result;
 import com.lingfeng.camundastudy.domain.dto.user.UserDto;
 import com.lingfeng.camundastudy.domain.dto.user.UserSaveDto;
 import com.lingfeng.camundastudy.service.user.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
+@Tag(name = "用户接口")
 public class UserController {
 
     @Resource

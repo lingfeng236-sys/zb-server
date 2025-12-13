@@ -1,11 +1,13 @@
 package com.lingfeng.camundastudy.config;
 
 import com.lingfeng.camundastudy.common.security.filter.JwtAuthenticationFilter;
+import com.lingfeng.camundastudy.common.security.handle.SecurityExceptionHandler;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -27,10 +29,14 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity // 开启 Spring Security 的自定义配置
+@EnableMethodSecurity // <--- 开启注解权限控制
 public class SecurityConfig {
 
     @Resource
     private JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    @Resource
+    private SecurityExceptionHandler securityExceptionHandler;
 
     // 1. 密码加密器：使用 BCrypt（这是行业标准）
     @Bean
@@ -49,13 +55,18 @@ public class SecurityConfig {
                 // 3. 设置 Session 管理策略为无状态 (STATELESS)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // 4. 授权规则
-                .authorizeHttpRequests(auth -> auth
+                /*.authorizeHttpRequests(auth -> auth
                         .requestMatchers("/public/**").permitAll()     // 所有人都可以访问以 /public 开头的接口
                         .requestMatchers("/admin/**").hasRole("ADMIN") // 只有拥有 ADMIN 角色的用户可以访问 /admin
                         .requestMatchers("/user/login").permitAll() // ⚠️ 放行登录接口，否则谁也进不来
                         .anyRequest().authenticated()                  // 其他所有接口都需要登录才能访问
-                )
+                )*/
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                // 🔥 新增：配置异常处理
+                .exceptionHandling(exceptions -> exceptions
+                        .authenticationEntryPoint(securityExceptionHandler) // 处理 401
+                        .accessDeniedHandler(securityExceptionHandler)      // 处理 403
+                )
                 ;
 
         return http.build();
