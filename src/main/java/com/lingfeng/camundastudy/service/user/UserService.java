@@ -2,12 +2,15 @@ package com.lingfeng.camundastudy.service.user;
 
 import com.lingfeng.camundastudy.common.constant.CommonStateCode;
 import com.lingfeng.camundastudy.common.exception.BizException;
+import com.lingfeng.camundastudy.common.util.JwtUtil;
 import com.lingfeng.camundastudy.convert.UserConvert;
 import com.lingfeng.camundastudy.dao.repo.UserRepo;
 import com.lingfeng.camundastudy.domain.dto.user.UserDto;
 import com.lingfeng.camundastudy.domain.dto.user.UserSaveDto;
 import com.lingfeng.camundastudy.domain.entity.UserEntity;
 import jakarta.annotation.Resource;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,29 +22,25 @@ public class UserService {
     @Resource
     private UserConvert  userConvert;
 
+    @Resource
+    private AuthenticationManager authenticationManager;
+    @Resource
+    private JwtUtil jwtUtil;
+
     /**
      * 登录功能
      */
     public String login(UserSaveDto userSaveDto) {
+// 1. 创建认证令牌
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(userSaveDto.getUsername(), userSaveDto.getPassword());
 
+        // 2. 调用 AuthenticationManager 进行认证
+        // 如果认证失败（密码错误），这里会抛出异常
+        authenticationManager.authenticate(authenticationToken);
 
-        UserEntity user = userRepo.getByUsername(userSaveDto.getUsername());
-
-        // 3. 校验用户是否存在
-        if (user == null) {
-            throw new BizException(CommonStateCode.USER_NOT_EXIST);
-        }
-
-        // 4. 校验密码
-        // 注意：实际项目中请使用 BCryptPasswordEncoder 或 MD5 加密对比
-        // 示例：if (!BCrypt.checkpw(loginDTO.getPassword(), user.getPassword()))
-        if (!user.getPassword().equals(userSaveDto.getPassword())) {
-            throw new BizException(CommonStateCode.USER_PASSWORD_ERROR);
-        }
-
-        // 5. 登录成功，生成 Token (这里模拟返回一个 token 字符串)
-        // 实际开发中通常使用 JWT (Json Web Token)
-        return "Login_Success_Token_" + user.getId();
+        // 3. 认证成功，生成 Token 并返回
+        return jwtUtil.generateToken(userSaveDto.getUsername());
     }
 
     /**

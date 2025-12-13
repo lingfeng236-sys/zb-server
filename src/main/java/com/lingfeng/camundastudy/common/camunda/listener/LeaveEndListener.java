@@ -1,4 +1,4 @@
-package com.lingfeng.camundastudy.camunda.listener;
+package com.lingfeng.camundastudy.common.camunda.listener;
 
 import com.lingfeng.camundastudy.dao.repo.LeaveRecordRepo;
 import com.lingfeng.camundastudy.domain.entity.LeaveRecordEntity;

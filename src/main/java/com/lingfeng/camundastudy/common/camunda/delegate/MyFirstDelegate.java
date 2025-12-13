@@ -1,4 +1,4 @@
-package com.lingfeng.camundastudy.camunda.delegate;
+package com.lingfeng.camundastudy.common.camunda.delegate;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;

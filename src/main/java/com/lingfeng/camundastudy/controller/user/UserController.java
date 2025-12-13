@@ -4,13 +4,9 @@ package com.lingfeng.camundastudy.controller.user;
 import com.lingfeng.camundastudy.common.domain.Result;
 import com.lingfeng.camundastudy.domain.dto.user.UserDto;
 import com.lingfeng.camundastudy.domain.dto.user.UserSaveDto;
-import com.lingfeng.camundastudy.domain.entity.UserEntity;
 import com.lingfeng.camundastudy.service.user.UserService;
 import jakarta.annotation.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/user")

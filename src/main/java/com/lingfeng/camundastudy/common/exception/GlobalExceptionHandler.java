@@ -68,6 +68,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public Result<String> handleException(Exception e) {
         log.error("系统异常", e);
-        return Result.newFailedResult(CommonStateCode.ERROR);
+        return Result.newFailedResult(CommonStateCode.ERROR, e.getMessage());
     }
 }

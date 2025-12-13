@@ -6,6 +6,8 @@ import com.lingfeng.camundastudy.dao.mapper.UserMapper;
 import com.lingfeng.camundastudy.domain.entity.UserEntity;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public class UserRepo extends ServiceImpl<UserMapper, UserEntity> {
 
@@ -13,5 +15,9 @@ public class UserRepo extends ServiceImpl<UserMapper, UserEntity> {
         LambdaQueryWrapper<UserEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(UserEntity::getUsername, username);
         return this.getOne(queryWrapper);
+    }
+
+    public Optional<UserEntity> findByUsername(String username) {
+        return Optional.ofNullable(getByUsername( username));
     }
 }

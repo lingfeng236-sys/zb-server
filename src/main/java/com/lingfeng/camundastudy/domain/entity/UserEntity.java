@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.lingfeng.camundastudy.common.domain.BaseEntity;
 import com.lingfeng.camundastudy.common.type.handle.EncryptTypeHandler;
 import com.lingfeng.camundastudy.enums.user.GenderEnum;
+import com.lingfeng.camundastudy.enums.user.RoleEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -22,10 +23,12 @@ public class UserEntity extends BaseEntity {
     private String username;
 
     // 实际项目中该字段通常不直接返回给前端，可以使用 @JsonIgnore
-    @TableField(typeHandler = EncryptTypeHandler.class)
+//    @TableField(typeHandler = EncryptTypeHandler.class)
     private String password;
 
     private String nickname;
+
+    private RoleEnum role;
 
     private String email;
 

@@ -1,11 +1,13 @@
 package com.lingfeng.camundastudy.controller.security;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Tag(name = "安全接口", description = "安全接口")
 public class HelloController {
 
     @GetMapping("/hello")
