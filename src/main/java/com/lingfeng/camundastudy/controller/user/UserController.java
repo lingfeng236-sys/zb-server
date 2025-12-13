@@ -9,6 +9,7 @@ import com.lingfeng.camundastudy.domain.dto.user.UserSaveDto;
 import com.lingfeng.camundastudy.service.user.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -39,7 +40,7 @@ public class UserController {
     // 2. 新增用户
     @IsUserOrAdmin
     @PostMapping("/register")
-    public Result<Boolean> register(@RequestBody UserSaveDto userSaveDto) {
+    public Result<Boolean> register(@RequestBody @Valid UserSaveDto userSaveDto) {
         userService.register(userSaveDto);
         return Result.ok();
     }
