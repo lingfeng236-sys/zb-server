@@ -8,6 +8,6 @@ import lombok.Data;
 public class UserSaveDto {
     private String username;
     private String password;
-    private GenderEnum gender;
+    private GenderEnum gender = GenderEnum.UNKNOWN;
     private RoleEnum role;
 }

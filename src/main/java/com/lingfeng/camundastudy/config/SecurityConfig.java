@@ -58,7 +58,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/public/**").permitAll()     // 所有人都可以访问以 /public 开头的接口
                         .requestMatchers("/admin/**").hasRole("ADMIN") // 只有拥有 ADMIN 角色的用户可以访问 /admin
-                        .requestMatchers("/user/login").permitAll() // ⚠️ 放行登录接口，否则谁也进不来
+                        .requestMatchers("/user/login", "/user/register").permitAll() // ⚠️ 放行登录接口，否则谁也进不来
                         .anyRequest().authenticated()                  // 其他所有接口都需要登录才能访问
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

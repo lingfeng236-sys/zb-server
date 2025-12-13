@@ -8,7 +8,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum GenderEnum implements BaseCodeEnum {
     MALE(1, "男"),
-    FEMALE(2, "女");
+    FEMALE(2, "女"),
+    UNKNOWN(3, "未知"),
+    ;
 
     private final Integer code;
     private final String desc;

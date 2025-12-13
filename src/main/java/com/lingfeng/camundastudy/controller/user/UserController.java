@@ -2,6 +2,7 @@ package com.lingfeng.camundastudy.controller.user;
 
 
 import com.lingfeng.camundastudy.common.annotation.security.IsOwnerOrAdmin;
+import com.lingfeng.camundastudy.common.annotation.security.IsUserOrAdmin;
 import com.lingfeng.camundastudy.common.domain.Result;
 import com.lingfeng.camundastudy.domain.dto.user.UserDto;
 import com.lingfeng.camundastudy.domain.dto.user.UserSaveDto;
@@ -36,9 +37,9 @@ public class UserController {
     }
 
     // 2. 新增用户
+    @IsUserOrAdmin
     @PostMapping("/register")
     public Result<Boolean> register(@RequestBody UserSaveDto userSaveDto) {
-
         userService.register(userSaveDto);
         return Result.ok();
     }
