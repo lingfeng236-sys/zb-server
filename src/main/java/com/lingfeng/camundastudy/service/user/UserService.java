@@ -8,7 +8,6 @@ import com.lingfeng.camundastudy.dao.repo.UserRepo;
 import com.lingfeng.camundastudy.domain.dto.user.UserDto;
 import com.lingfeng.camundastudy.domain.dto.user.UserSaveDto;
 import com.lingfeng.camundastudy.domain.entity.UserEntity;
-import com.lingfeng.camundastudy.enums.user.GenderEnum;
 import com.lingfeng.camundastudy.enums.user.RoleEnum;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;

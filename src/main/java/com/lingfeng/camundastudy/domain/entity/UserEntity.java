@@ -1,11 +1,9 @@
 package com.lingfeng.camundastudy.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.lingfeng.camundastudy.common.domain.BaseEntity;
-import com.lingfeng.camundastudy.common.type.handle.EncryptTypeHandler;
 import com.lingfeng.camundastudy.enums.user.GenderEnum;
 import com.lingfeng.camundastudy.enums.user.RoleEnum;
 import lombok.Data;
