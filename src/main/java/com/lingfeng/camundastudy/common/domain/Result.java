@@ -1,7 +1,9 @@
 package com.lingfeng.camundastudy.common.domain;
 
 import com.lingfeng.camundastudy.common.constant.CommonStateCode;
+import com.lingfeng.camundastudy.common.util.StrUtils;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * comment:
@@ -27,6 +29,9 @@ public class Result<T> {
     }
 
     public static <T> Result<T> newFailedResult(String msg) {
+        if (StrUtils.isBlank(msg)) {
+            msg = CommonStateCode.ERROR.getMsg();
+        }
         return new Result<>(CommonStateCode.ERROR.getCode(), msg, null);
     }
 

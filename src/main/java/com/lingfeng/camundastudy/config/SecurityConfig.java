@@ -18,6 +18,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity // 开启 Spring Security 的自定义配置
@@ -38,9 +44,11 @@ public class SecurityConfig {
         http
                 // 1. 关闭 CSRF (前后端分离通常不需要，且会阻碍 POST 请求)
                 .csrf(AbstractHttpConfigurer::disable)
-                // 2. 设置 Session 管理策略为无状态 (STATELESS)
+                // 2. 启用 CORS
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                // 3. 设置 Session 管理策略为无状态 (STATELESS)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // 3. 授权规则
+                // 4. 授权规则
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/public/**").permitAll()     // 所有人都可以访问以 /public 开头的接口
                         .requestMatchers("/admin/**").hasRole("ADMIN") // 只有拥有 ADMIN 角色的用户可以访问 /admin
@@ -57,5 +65,27 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
+    }
+
+    // 配置 CORS
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        // 允许的源（前端地址），生产环境应指定具体域名
+        configuration.setAllowedOriginPatterns(List.of("*")); // 允许所有来源，也可以指定具体的前端地址如 "http://localhost:3000"
+        // 允许的 HTTP 方法
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        // 允许的请求头
+        configuration.setAllowedHeaders(List.of("*"));
+        // 是否允许携带凭证（如 Cookie）
+        configuration.setAllowCredentials(true);
+        // 预检请求的有效期（秒）
+        configuration.setMaxAge(3600L);
+        // 暴露的响应头
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Type"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // 对所有路径生效
+        return source;
     }
 }
