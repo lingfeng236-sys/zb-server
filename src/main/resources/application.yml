@@ -67,6 +67,11 @@ logging:
     org.camunda: INFO
     com.alibaba.druid: DEBUG
 
+# JWT 配置
+jwt:
+  secret: mySecretKeyForJwtTokenGenerationAndValidation123456789  # 至少32个字符
+  expiration: 3600000  # Token有效期：1小时（毫秒）
+
 # MyBatis-Plus 配置
 mybatis-plus:
   configuration:

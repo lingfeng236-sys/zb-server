@@ -55,12 +55,12 @@ public class SecurityConfig {
                 // 3. 设置 Session 管理策略为无状态 (STATELESS)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // 4. 授权规则
-                /*.authorizeHttpRequests(auth -> auth
+                .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/public/**").permitAll()     // 所有人都可以访问以 /public 开头的接口
                         .requestMatchers("/admin/**").hasRole("ADMIN") // 只有拥有 ADMIN 角色的用户可以访问 /admin
                         .requestMatchers("/user/login").permitAll() // ⚠️ 放行登录接口，否则谁也进不来
                         .anyRequest().authenticated()                  // 其他所有接口都需要登录才能访问
-                )*/
+                )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 // 🔥 新增：配置异常处理
                 .exceptionHandling(exceptions -> exceptions
