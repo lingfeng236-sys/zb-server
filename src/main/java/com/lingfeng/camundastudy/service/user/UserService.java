@@ -10,6 +10,7 @@ import com.lingfeng.camundastudy.dao.repo.UserRepo;
 import com.lingfeng.camundastudy.domain.dto.user.UserDto;
 import com.lingfeng.camundastudy.domain.dto.user.UserQueryDto;
 import com.lingfeng.camundastudy.domain.dto.user.UserSaveDto;
+import com.lingfeng.camundastudy.domain.dto.user.UserUpdatePwdDto;
 import com.lingfeng.camundastudy.domain.entity.UserEntity;
 import com.lingfeng.camundastudy.enums.user.RoleEnum;
 import jakarta.annotation.Resource;
@@ -144,5 +145,24 @@ public class UserService {
         entity.setEmail(dto.getEmail());
         // 不允许修改用户名和密码
         userRepo.updateById(entity);
+    }
+
+    /**
+     * 修改密码
+     */
+    public void updatePassword(UserUpdatePwdDto dto) {
+        // 1. 查询用户
+        UserEntity user = userRepo.findByUsername(dto.getUsername())
+                .orElseThrow(() -> new BizException(CommonStateCode.USER_NOT_EXIST));
+
+        // 2. 校验旧密码 (参数1: 明文, 参数2: 密文)
+        if (!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) {
+            // 抛出自定义异常：密码错误
+            throw new BizException(CommonStateCode.USER_PASSWORD_ERROR);
+        }
+
+        // 3. 加密新密码并更新
+        user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+        userRepo.updateById(user);
     }
 }

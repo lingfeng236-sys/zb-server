@@ -1,6 +1,6 @@
 package com.lingfeng.camundastudy.common.domain;
 
-import com.alibaba.fastjson2.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lingfeng.camundastudy.common.util.DateUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -21,7 +21,7 @@ public class BaseDto implements Serializable {
     @Schema(description = "创建人ID")
     private Long createById;
 
-    @JSONField(format = DateUtil.CT_DS)
+    @JsonFormat(pattern = DateUtil.CT_DS, timezone = "GMT+8")
     @Schema(description = "创建时间")
     private Date createTime;
 
@@ -31,7 +31,7 @@ public class BaseDto implements Serializable {
     @Schema(description = "修改人ID")
     private Long updateById;
 
-    @JSONField(format = DateUtil.CT_DS)
+    @JsonFormat(pattern = DateUtil.CT_DS, timezone = "GMT+8")
     @Schema(description = "变更时间")
     private Date updateTime;
 

@@ -8,6 +8,7 @@ import com.lingfeng.camundastudy.common.domain.Result;
 import com.lingfeng.camundastudy.domain.dto.user.UserDto;
 import com.lingfeng.camundastudy.domain.dto.user.UserQueryDto;
 import com.lingfeng.camundastudy.domain.dto.user.UserSaveDto;
+import com.lingfeng.camundastudy.domain.dto.user.UserUpdatePwdDto;
 import com.lingfeng.camundastudy.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -81,5 +82,18 @@ public class UserController {
         userService.updateProfile(userSaveDto);
         return Result.ok();
     }
+
+    /**
+     * 修改密码
+     * 场景：用户在个人中心修改自己的密码
+     */
+    @PutMapping("/updatePassword")
+    @Operation(summary = "修改密码")
+    public Result<Boolean> updatePassword(@RequestBody @Valid UserUpdatePwdDto dto) {
+        userService.updatePassword(dto);
+        return Result.ok();
+    }
+
+
 
 }

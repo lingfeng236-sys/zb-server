@@ -1,7 +1,7 @@
 package com.lingfeng.camundastudy.common.domain;
 
 
-import com.alibaba.fastjson2.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.lingfeng.camundastudy.common.util.DateUtil;
@@ -31,7 +31,7 @@ public class BaseEntity implements Serializable {
     private Long createById;
 
     @TableField(value = "create_time", fill = FieldFill.INSERT)
-    @JSONField(format = DateUtil.CT_DS)
+    @JsonFormat(pattern = DateUtil.CT_DS, timezone = "GMT+8")
     @Schema(description = "创建时间")
     private Date createTime;
 
@@ -44,7 +44,7 @@ public class BaseEntity implements Serializable {
     private Long updateById;
 
     @TableField(value = "update_time", fill = FieldFill.UPDATE)
-    @JSONField(format = DateUtil.CT_DS)
+    @JsonFormat(pattern = DateUtil.CT_DS, timezone = "GMT+8")
     @Schema(description = "修改时间")
     private Date updateTime;
 

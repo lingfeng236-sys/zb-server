@@ -37,7 +37,7 @@ public enum CommonStateCode {
     USER_NOT_EXIST(4500, "用户不存在"),
     USER_NOT_LOGIN(4501, "用户未登录"),
     USER_NOT_LOGOUT(4502, "用户未登出"),
-    USER_PASSWORD_ERROR(4503, "用户密码错误"),
+    USER_PASSWORD_ERROR(4503, "旧密码错误"),
     USER_ALREADY_EXIST(4504, "用户已存在")
     ;
 
