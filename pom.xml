@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.lingfeng</groupId>
-    <artifactId>camunda-study</artifactId>
+    <artifactId>zb-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>camunda-study</name>
     <description>camunda-study</description>
