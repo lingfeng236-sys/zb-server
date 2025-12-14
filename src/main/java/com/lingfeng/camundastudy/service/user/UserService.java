@@ -1,11 +1,17 @@
 package com.lingfeng.camundastudy.service.user;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lingfeng.camundastudy.common.constant.CommonStateCode;
 import com.lingfeng.camundastudy.common.exception.BizException;
+import com.lingfeng.camundastudy.common.util.CollectionUtils;
 import com.lingfeng.camundastudy.common.util.JwtUtil;
+import com.lingfeng.camundastudy.common.util.StrUtils;
 import com.lingfeng.camundastudy.convert.UserConvert;
 import com.lingfeng.camundastudy.dao.repo.UserRepo;
 import com.lingfeng.camundastudy.domain.dto.user.UserDto;
+import com.lingfeng.camundastudy.domain.dto.user.UserQueryDto;
 import com.lingfeng.camundastudy.domain.dto.user.UserSaveDto;
 import com.lingfeng.camundastudy.domain.entity.UserEntity;
 import com.lingfeng.camundastudy.enums.user.RoleEnum;
@@ -16,6 +22,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -73,5 +80,29 @@ public class UserService {
     public UserDto detail(Long id) {
         UserEntity userEntity = userRepo.getById(id);
         return userConvert.userEntity2Dto(userEntity);
+    }
+
+    /**
+     * 分页查询用户列表
+     */
+    public IPage<UserDto> page(UserQueryDto userQueryDto) {
+        IPage<UserEntity> result = userRepo.queryByPage(userQueryDto);
+        IPage<UserDto> resultPage = new Page<>(result.getCurrent(), result.getSize(), result.getTotal());
+        List<UserEntity> userEntityList = result.getRecords();
+        if (CollectionUtils.isEmpty(userEntityList)) {
+            return resultPage;
+        }
+        return resultPage.setRecords(userConvert.userEntityList2DtoList(userEntityList));
+    }
+
+    /**
+     * 删除用户
+     */
+    public Boolean delete(Long id) {
+        // 这里可以加业务判断，比如：不能删除管理员，不能删除自己等
+        if (id == 1L) {
+            throw new BizException(CommonStateCode.ILLEGAL_PARAMETER); // 举例：禁止删除 ID 为 1 的超管
+        }
+        return userRepo.removeById(id);
     }
 }

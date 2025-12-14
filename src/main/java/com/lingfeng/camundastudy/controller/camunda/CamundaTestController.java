@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.util.JSONObject1O;
 import com.lingfeng.camundastudy.common.domain.Result;
 import com.lingfeng.camundastudy.domain.entity.UserEntity;
 import com.lingfeng.camundastudy.service.camunda.CamundaTestService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import org.camunda.bpm.engine.RuntimeService;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/camunda/test")
+@Tag(name = "Camunda测试")
 public class CamundaTestController {
 
     @Resource

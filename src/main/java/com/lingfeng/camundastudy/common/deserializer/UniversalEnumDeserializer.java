@@ -22,7 +22,7 @@ public class UniversalEnumDeserializer extends JsonDeserializer<BaseCodeEnum> {
     }
 
     @Override
-    public BaseCodeEnum deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    public BaseCodeEnum deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         // 1. 读取当前 JSON 节点 (兼容 Object 和 Scalar)
         JsonNode node = p.getCodec().readTree(p);
 
