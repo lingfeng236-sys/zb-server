@@ -1,6 +1,5 @@
 package com.lingfeng.camundastudy.service.user;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lingfeng.camundastudy.common.constant.CommonStateCode;
@@ -108,8 +107,24 @@ public class UserService {
             userSaveDto.setRole(RoleEnum.USER);
             register(userSaveDto);
         } else {
-            // 编辑用户
+            // 编辑
+            // 1. 先查出数据库里的原数据
+            UserEntity oldUser = userRepo.getById(userSaveDto.getId());
+            if(oldUser == null) {
+                throw new BizException(CommonStateCode.USER_NOT_EXIST);
+            };
+
+            // 2. 转换
             UserEntity userEntity = userConvert.UserSaveDto2Entity(userSaveDto);
+
+            // 3. 特殊处理密码：如果前端没传密码（空字符串），则使用数据库原密码
+            if (StrUtils.isBlank(userSaveDto.getPassword())) {
+                userEntity.setPassword(oldUser.getPassword());
+            } else {
+                // 如果传了新密码，记得加密！
+                userEntity.setPassword(passwordEncoder.encode(userSaveDto.getPassword()));
+            }
+
             userRepo.updateById(userEntity);
         }
     }
