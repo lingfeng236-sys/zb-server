@@ -1,12 +1,11 @@
 package com.lingfeng.camundastudy.config;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.lingfeng.camundastudy.common.deserializer.UniversalEnumDeserializer;
+import com.lingfeng.camundastudy.config.deserializer.UniversalEnumDeserializer;
 import com.lingfeng.camundastudy.enums.base.BaseCodeEnum;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -29,6 +29,7 @@ public class UserRepo extends ServiceImpl<UserMapper, UserEntity> {
         LambdaQueryWrapperX<UserEntity> queryWrapper = new LambdaQueryWrapperX<>();
         queryWrapper.likeIfPresent(UserEntity::getUsername, userQueryDto.getUsername());
         queryWrapper.eqIfPresent(UserEntity::getGender, userQueryDto.getGender());
+        queryWrapper.eqIfPresent(UserEntity::getRole, userQueryDto.getRole());
         queryWrapper.orderByDesc(UserEntity::getId);
         IPage<UserEntity> page = new Page<>(userQueryDto.getPageNum(), userQueryDto.getPageSize());
         return this.page(page, queryWrapper);

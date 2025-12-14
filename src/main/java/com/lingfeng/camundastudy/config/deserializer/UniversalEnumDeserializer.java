@@ -1,4 +1,4 @@
-package com.lingfeng.camundastudy.common.deserializer;
+package com.lingfeng.camundastudy.config.deserializer;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
