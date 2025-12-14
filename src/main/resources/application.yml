@@ -70,8 +70,8 @@ logging:
 # JWT 配置
 jwt:
   secret: mySecretKeyForJwtTokenGenerationAndValidation123456789  # 至少32个字符
-  expiration: 3600000  # Token有效期：1小时（毫秒）
-
+  # Token有效期 一年
+  expiration: 31536000
 # MyBatis-Plus 配置
 mybatis-plus:
   configuration:
@@ -81,7 +81,7 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: auto  # 主键策略：数据库自增
-      logic-delete-field: deleted  # 逻辑删除字段
+      logic-delete-field: delFlag  # 逻辑删除字段
       logic-delete-value: 1  # 逻辑已删除值
       logic-not-delete-value: 0  # 逻辑未删除值
   mapper-locations: classpath*:/mapper/**/*.xml  # Mapper XML 文件位置

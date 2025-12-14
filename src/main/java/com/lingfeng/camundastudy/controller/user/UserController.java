@@ -74,25 +74,11 @@ public class UserController {
         return Result.ok(userService.detail(id));
     }
 
-    /*// 3. 删除用户 (Delete)
-    @DeleteMapping("/delete/{id}")
-    public String delete(@PathVariable Long id) {
-        boolean success = userService.removeById(id);
-        return success ? "删除成功" : "删除失败";
+    // 4. 修改用户（新增或编辑）
+    @IsAdmin
+    @PutMapping("/addOrEdit")
+    public Result<Boolean> addOrEdit(@RequestBody UserSaveDto userSaveDto) {
+        userService.addOrEdit(userSaveDto);
+        return Result.ok();
     }
-
-    // 4. 修改用户 (Update)
-    @PutMapping("/update")
-    public String update(@RequestBody User user) {
-        boolean success = userService.updateById(user);
-        return success ? "修改成功" : "修改失败";
-    }
-
-
-
-    // 6. 查询所有用户 (Retrieve All)
-    @GetMapping("/list")
-    public List<User> list() {
-        return userService.list();
-    }*/
 }

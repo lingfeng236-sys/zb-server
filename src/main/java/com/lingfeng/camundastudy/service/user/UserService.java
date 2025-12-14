@@ -7,6 +7,7 @@ import com.lingfeng.camundastudy.common.constant.CommonStateCode;
 import com.lingfeng.camundastudy.common.exception.BizException;
 import com.lingfeng.camundastudy.common.util.CollectionUtils;
 import com.lingfeng.camundastudy.common.util.JwtUtil;
+import com.lingfeng.camundastudy.common.util.NumberUtils;
 import com.lingfeng.camundastudy.common.util.StrUtils;
 import com.lingfeng.camundastudy.convert.UserConvert;
 import com.lingfeng.camundastudy.dao.repo.UserRepo;
@@ -99,10 +100,17 @@ public class UserService {
      * 删除用户
      */
     public Boolean delete(Long id) {
-        // 这里可以加业务判断，比如：不能删除管理员，不能删除自己等
-        if (id == 1L) {
-            throw new BizException(CommonStateCode.ILLEGAL_PARAMETER); // 举例：禁止删除 ID 为 1 的超管
-        }
         return userRepo.removeById(id);
+    }
+
+    public void addOrEdit(UserSaveDto userSaveDto) {
+        if (NumberUtils.isNull(userSaveDto.getId())) {
+            userSaveDto.setRole(RoleEnum.USER);
+            register(userSaveDto);
+        } else {
+            // 编辑用户
+            UserEntity userEntity = userConvert.UserSaveDto2Entity(userSaveDto);
+            userRepo.updateById(userEntity);
+        }
     }
 }
