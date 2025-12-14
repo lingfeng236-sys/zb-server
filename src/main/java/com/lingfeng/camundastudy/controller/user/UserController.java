@@ -2,23 +2,18 @@ package com.lingfeng.camundastudy.controller.user;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lingfeng.camundastudy.common.annotation.security.IsAdmin;
-import com.lingfeng.camundastudy.common.annotation.security.IsOwnerOrAdmin;
 import com.lingfeng.camundastudy.common.annotation.security.IsUserOrAdmin;
 import com.lingfeng.camundastudy.common.domain.Result;
 import com.lingfeng.camundastudy.domain.dto.user.UserDto;
 import com.lingfeng.camundastudy.domain.dto.user.UserQueryDto;
 import com.lingfeng.camundastudy.domain.dto.user.UserSaveDto;
-import com.lingfeng.camundastudy.enums.user.GenderEnum;
 import com.lingfeng.camundastudy.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -41,15 +36,6 @@ public class UserController {
     @Operation(summary = "删除用户")
     public Result<Boolean> delete(@PathVariable Long id) {
         return Result.ok(userService.delete(id));
-    }
-
-
-    // 场景：修改用户密码
-    // 只有管理员，或者用户自己（username匹配）才能修改
-    @IsOwnerOrAdmin
-    @PutMapping("/updatePassword")
-    public Result<Boolean> updatePassword(@RequestParam String username, @RequestParam String newPwd) {
-        return Result.ok();
     }
 
     // 1. 登录接口
@@ -81,4 +67,19 @@ public class UserController {
         userService.addOrEdit(userSaveDto);
         return Result.ok();
     }
+
+    @GetMapping("/info")
+    @Operation(summary = "获取当前登录用户信息")
+    public Result<UserDto> info() {
+        UserDto userDto = userService.getCurrentUser();
+        return Result.ok(userDto);
+    }
+
+    @PutMapping("/updateProfile")
+    @Operation(summary = "更新个人资料")
+    public Result<Boolean> updateProfile(@RequestBody UserSaveDto userSaveDto) {
+        userService.updateProfile(userSaveDto);
+        return Result.ok();
+    }
+
 }

@@ -15,4 +15,6 @@ public class UserSaveDto {
     private String password;
     private GenderEnum gender = GenderEnum.UNKNOWN;
     private RoleEnum role;
+    private String email;
+    private String nickname;
 }

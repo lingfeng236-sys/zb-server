@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lingfeng.camundastudy.common.constant.CommonStateCode;
 import com.lingfeng.camundastudy.common.exception.BizException;
-import com.lingfeng.camundastudy.common.util.CollectionUtils;
-import com.lingfeng.camundastudy.common.util.JwtUtil;
-import com.lingfeng.camundastudy.common.util.NumberUtils;
-import com.lingfeng.camundastudy.common.util.StrUtils;
+import com.lingfeng.camundastudy.common.util.*;
 import com.lingfeng.camundastudy.convert.UserConvert;
 import com.lingfeng.camundastudy.dao.repo.UserRepo;
 import com.lingfeng.camundastudy.domain.dto.user.UserDto;
@@ -112,7 +109,7 @@ public class UserService {
             UserEntity oldUser = userRepo.getById(userSaveDto.getId());
             if(oldUser == null) {
                 throw new BizException(CommonStateCode.USER_NOT_EXIST);
-            };
+            }
 
             // 2. 转换
             UserEntity userEntity = userConvert.UserSaveDto2Entity(userSaveDto);
@@ -127,5 +124,25 @@ public class UserService {
 
             userRepo.updateById(userEntity);
         }
+    }
+
+    public UserDto getCurrentUser() {
+        // 1. 从 Security 上下文获取当前用户名
+        String username = SecurityUtil.getCurrentUsername();
+        return userConvert.userEntity2Dto(userRepo.getByUsername(username));
+
+    }
+
+    // 修改个人资料 (不含密码)
+    public void updateProfile(UserSaveDto dto) {
+        UserEntity entity = userRepo.getById(dto.getId());
+        if (entity == null) {
+            throw new BizException(CommonStateCode.USER_NOT_EXIST);
+        }
+        entity.setNickname(dto.getNickname());
+        entity.setGender(dto.getGender());
+        entity.setEmail(dto.getEmail());
+        // 不允许修改用户名和密码
+        userRepo.updateById(entity);
     }
 }
