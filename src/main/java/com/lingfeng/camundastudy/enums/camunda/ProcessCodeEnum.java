@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ProcessCodeEnum implements BaseCodeEnum<String> {
-    PROCESS_LEAVE("1", "男"),
+    PROCESS_LEAVE("process_leave", "男"),
     ;
 
     private final String code;

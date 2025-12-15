@@ -2,8 +2,10 @@ package com.lingfeng.camundastudy.service.camunda;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lingfeng.camundastudy.common.constant.CommonStateCode;
 import com.lingfeng.camundastudy.common.exception.BizException;
 import com.lingfeng.camundastudy.common.util.SecurityUtil;
+import com.lingfeng.camundastudy.common.util.StrUtils;
 import com.lingfeng.camundastudy.domain.dto.camunda.TaskDto;
 import jakarta.annotation.Resource;
 import org.camunda.bpm.engine.RuntimeService;
@@ -39,8 +41,8 @@ public class WorkflowService {
     @Transactional(rollbackFor = Exception.class)
     public String startProcess(String processKey, String businessKey, Map<String, Object> variables) {
         // 校验：必须传入 BusinessKey
-        if (businessKey == null || businessKey.isEmpty()) {
-            throw new RuntimeException("启动流程必须关联业务BusinessKey");
+        if (StrUtils.isBlank(businessKey)) {
+            throw new BizException(CommonStateCode.BUSINESS_KEY_NOT_EXIST);
         }
 
         // 启动流程

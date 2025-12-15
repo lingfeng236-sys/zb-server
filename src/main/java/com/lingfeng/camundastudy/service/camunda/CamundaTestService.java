@@ -3,6 +3,7 @@ package com.lingfeng.camundastudy.service.camunda;
 import com.lingfeng.camundastudy.dao.repo.LeaveRecordRepo;
 import com.lingfeng.camundastudy.domain.entity.LeaveRecordEntity;
 import com.lingfeng.camundastudy.enums.ApprovalStatus;
+import com.lingfeng.camundastudy.enums.camunda.ProcessCodeEnum;
 import jakarta.annotation.Resource;
 import org.camunda.bpm.engine.HistoryService;
 import org.camunda.bpm.engine.RuntimeService;
@@ -59,8 +60,7 @@ public class CamundaTestService {
         Map<String, Object> variables = new HashMap<>();
         variables.put("day", day); // 用于网关判断
 
-        // 关键点：将 1001 传给 Camunda，从此这两个数据就绑定了！
-        workflowService.startProcess("process_leave", businessKey, variables);
+        workflowService.startProcess(ProcessCodeEnum.PROCESS_LEAVE.getCode(), businessKey, variables);
 
     }
 }
