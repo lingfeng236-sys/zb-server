@@ -3,6 +3,7 @@ package com.lingfeng.camundastudy.config;
 import com.lingfeng.camundastudy.common.security.filter.JwtAuthenticationFilter;
 import com.lingfeng.camundastudy.common.security.handle.SecurityExceptionHandler;
 import jakarta.annotation.Resource;
+import org.camunda.bpm.engine.IdentityService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -56,6 +57,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole("ADMIN") // 只有拥有 ADMIN 角色的用户可以访问 /admin
                         .requestMatchers("/user/login", "/user/register").permitAll() // ⚠️ 放行登录接口，否则谁也进不来
                         .requestMatchers("/enum/**").permitAll() // 允许未登录访问枚举接口
+                        .requestMatchers("/camunda/**").permitAll() // 允许camunda访问枚举接口
                         .anyRequest().authenticated()                  // 其他所有接口都需要登录才能访问
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

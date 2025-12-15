@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class DictDto {
-    private Integer code;
+    private Object code;
     private String desc;
 }

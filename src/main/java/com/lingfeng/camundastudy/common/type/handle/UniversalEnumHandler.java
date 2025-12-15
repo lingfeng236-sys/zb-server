@@ -15,7 +15,7 @@ import java.util.Objects;
  * 通用枚举处理器
  * E 代表具体的枚举类，它必须同时继承 Enum 并且实现 BaseCodeEnum 接口
  */
-public class UniversalEnumHandler<E extends Enum<E> & BaseCodeEnum> extends BaseTypeHandler<E> {
+public class UniversalEnumHandler<E extends Enum<E> & BaseCodeEnum<?>> extends BaseTypeHandler<E> {
 
     private final Class<E> type;
 
@@ -30,7 +30,7 @@ public class UniversalEnumHandler<E extends Enum<E> & BaseCodeEnum> extends Base
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, E parameter, JdbcType jdbcType) throws SQLException {
         // 核心：调用接口方法获取 code，存入数据库
-        ps.setInt(i, parameter.getCode());
+        ps.setObject(i, parameter.getCode());
     }
 
     @Override

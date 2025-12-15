@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum ApprovalStatus implements BaseCodeEnum {
+public enum ApprovalStatus implements BaseCodeEnum<Integer> {
     // 审批中
     PENDING(0, "审批中"),
     // 通过

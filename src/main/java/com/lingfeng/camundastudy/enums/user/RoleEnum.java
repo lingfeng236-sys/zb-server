@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum RoleEnum implements BaseCodeEnum {
+public enum RoleEnum implements BaseCodeEnum<Integer> {
 
     ADMIN(1, RoleConst.ADMIN),
     USER(2, RoleConst.USER),

@@ -24,7 +24,7 @@ public class CamundaTestService {
     private LeaveRecordRepo leaveRecordRepo;
 
     @Resource
-    private RuntimeService runtimeService;
+    private WorkflowService workflowService;
 
     public void searchHistory() {
         // 查询所有已经结束的、变量 applicant = "Bob" 的流程
@@ -60,7 +60,7 @@ public class CamundaTestService {
         variables.put("day", day); // 用于网关判断
 
         // 关键点：将 1001 传给 Camunda，从此这两个数据就绑定了！
-        runtimeService.startProcessInstanceByKey("process_leave", businessKey, variables);
+        workflowService.startProcess("process_leave", businessKey, variables);
 
     }
 }

@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class EnumService {
 
     // 缓存：Map<枚举类简名, 枚举Class>，例如 "GenderEnum" -> GenderEnum.class
-    private final Map<String, Class<? extends BaseCodeEnum>> enumCache = new ConcurrentHashMap<>();
+    private final Map<String, Class<? extends BaseCodeEnum<?>>> enumCache = new ConcurrentHashMap<>();
 
     // 指定要扫描的枚举包路径
     private static final String ENUM_PACKAGE = "com.lingfeng.camundastudy.enums";
@@ -59,7 +59,7 @@ public class EnumService {
                         // 判断是否是枚举，且实现了 BaseCodeEnum 接口
                         if (clazz.isEnum() && BaseCodeEnum.class.isAssignableFrom(clazz)) {
                             String dictKey = generateDictKey(clazz.getSimpleName());
-                            enumCache.put(dictKey, (Class<? extends BaseCodeEnum>) clazz);
+                            enumCache.put(dictKey, (Class<? extends BaseCodeEnum<?>>) clazz);
                             log.debug("已加载字典枚举: {}", clazz.getSimpleName());
                         }
                     } catch (ClassNotFoundException e) {
@@ -95,13 +95,13 @@ public class EnumService {
      * @return List<DictDto>
      */
     public List<DictDto> obtainByDictType(String dictType) {
-        Class<? extends BaseCodeEnum> enumClass = enumCache.get(dictType);
+        Class<? extends BaseCodeEnum<?>> enumClass = enumCache.get(dictType);
         if (enumClass == null) {
             return Collections.emptyList();
         }
 
         // 获取该枚举的所有实例
-        BaseCodeEnum[] constants = enumClass.getEnumConstants();
+        BaseCodeEnum<?>[] constants = enumClass.getEnumConstants();
         if (constants == null) {
             return Collections.emptyList();
         }

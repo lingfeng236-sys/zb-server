@@ -27,19 +27,19 @@ public class JacksonConfig {
             @Override
             public JsonDeserializer<?> findEnumDeserializer(Class<?> type, DeserializationConfig config, BeanDescription beanDesc) throws JsonMappingException {
                 if (BaseCodeEnum.class.isAssignableFrom(type)) {
-                    return new UniversalEnumDeserializer((Class<? extends BaseCodeEnum>) type);
+                    return new UniversalEnumDeserializer((Class<? extends BaseCodeEnum<?>>) type);
                 }
                 return super.findEnumDeserializer(type, config, beanDesc);
             }
         });
 
         // 2. 处理序列化 (Enum -> JSON)
-        module.addSerializer(BaseCodeEnum.class, new JsonSerializer<BaseCodeEnum>() {
+        module.addSerializer(BaseCodeEnum.class, new JsonSerializer<BaseCodeEnum<?>>() {
             @Override
-            public void serialize(BaseCodeEnum value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+            public void serialize(BaseCodeEnum<?> value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
                 // 将枚举序列化为包含所有属性的 JSON 对象
                 gen.writeStartObject();
-                gen.writeNumberField("code", value.getCode());
+                gen.writeObjectField("code", value.getCode());
                 gen.writeStringField("desc", value.getDesc());
                 // 添加枚举名称
                 gen.writeStringField("enumName", ((Enum<?>) value).name());
