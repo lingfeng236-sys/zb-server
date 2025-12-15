@@ -1,5 +1,6 @@
 package com.lingfeng.camundastudy.service.camunda;
 
+import com.lingfeng.camundastudy.common.util.SecurityUtil;
 import com.lingfeng.camundastudy.dao.repo.LeaveRecordRepo;
 import com.lingfeng.camundastudy.domain.entity.LeaveRecordEntity;
 import com.lingfeng.camundastudy.enums.ApprovalStatus;
@@ -59,7 +60,7 @@ public class CamundaTestService {
         // 2. 【后】启动流程，并绑定 BusinessKey
         Map<String, Object> variables = new HashMap<>();
         variables.put("day", day); // 用于网关判断
-
+        variables.put("approver", SecurityUtil.getCurrentUsername());
         workflowService.startProcess(ProcessCodeEnum.PROCESS_LEAVE.getCode(), businessKey, variables);
 
     }

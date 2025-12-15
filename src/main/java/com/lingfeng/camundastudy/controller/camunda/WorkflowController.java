@@ -29,7 +29,7 @@ public class WorkflowController {
 
     @PostMapping("/task/complete/{taskId}")
     @Operation(summary = "完成/审批任务")
-    public Result<Void> completeTask(@PathVariable String taskId, @RequestBody Map<String, Object> variables) {
+    public Result<Void> completeTask(@PathVariable String taskId, @RequestBody(required = false) Map<String, Object> variables) {
         // variables 示例: { "approved": true, "comment": "同意" }
         workflowService.completeTask(taskId, variables);
         return Result.ok();

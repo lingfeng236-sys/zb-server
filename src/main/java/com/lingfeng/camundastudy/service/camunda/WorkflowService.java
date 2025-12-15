@@ -6,10 +6,16 @@ import com.lingfeng.camundastudy.common.constant.CommonStateCode;
 import com.lingfeng.camundastudy.common.exception.BizException;
 import com.lingfeng.camundastudy.common.util.SecurityUtil;
 import com.lingfeng.camundastudy.common.util.StrUtils;
+import com.lingfeng.camundastudy.dao.repo.UserRepo;
 import com.lingfeng.camundastudy.domain.dto.camunda.TaskDto;
+import com.lingfeng.camundastudy.domain.entity.UserEntity;
 import jakarta.annotation.Resource;
+import org.camunda.bpm.engine.HistoryService;
+import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.history.HistoricProcessInstance;
+import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.camunda.bpm.engine.task.TaskQuery;
@@ -30,6 +36,13 @@ public class WorkflowService {
     private RuntimeService runtimeService;
     @Resource
     private TaskService taskService;
+
+    @Resource
+    private RepositoryService repositoryService; // 新增
+    @Resource
+    private HistoryService historyService; // 新增
+    @Resource
+    private UserRepo userRepo; // 新增
 
     /**
      * 1. 统一流程启动接口
@@ -80,31 +93,76 @@ public class WorkflowService {
         List<Task> taskList = query.listPage((pageNum - 1) * pageSize, pageSize);
 
         // 转换为 DTO
+
         List<TaskDto> dtos = new ArrayList<>();
         for (Task task : taskList) {
-            // 查询关联的流程实例以获取 BusinessKey
-            ProcessInstance processInstance = runtimeService.createProcessInstanceQuery()
-                    .processInstanceId(task.getProcessInstanceId())
-                    .singleResult();
-
-            TaskDto dto = new TaskDto();
-            dto.setTaskId(task.getId());
-            dto.setTaskName(task.getName());
-            dto.setAssignee(task.getAssignee());
-            dto.setCreateTime(task.getCreateTime());
-            dto.setProcessInstanceId(task.getProcessInstanceId());
-            dto.setProcessDefinitionId(task.getProcessDefinitionId());
-            
-            if (processInstance != null) {
-                dto.setBusinessKey(processInstance.getBusinessKey());
-            }
-            dtos.add(dto);
+            dtos.add(toTaskDto(task));
         }
-
         IPage<TaskDto> page = new Page<>(pageNum, pageSize);
         page.setTotal(total);
         page.setRecords(dtos);
         return page;
+    }
+
+    /**
+     * 获取单个任务详情
+     */
+    public TaskDto getTaskInfo(String taskId) {
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        if (task == null) {
+            throw new BizException(CommonStateCode.DATA_NOT_EXISTS);
+        }
+        return toTaskDto(task);
+    }
+
+    /**
+     * 将 Camunda Task 转换为自定义 TaskDto 并填充丰富信息
+     */
+    private TaskDto toTaskDto(Task task) {
+        TaskDto dto = new TaskDto();
+        dto.setTaskId(task.getId());
+        dto.setTaskName(task.getName());
+        dto.setAssignee(task.getAssignee());
+        dto.setCreateTime(task.getCreateTime());
+        dto.setProcessInstanceId(task.getProcessInstanceId());
+        dto.setProcessDefinitionId(task.getProcessDefinitionId());
+
+        // 1. 查询流程实例 (获取 BusinessKey)
+        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery()
+                .processInstanceId(task.getProcessInstanceId())
+                .singleResult();
+        if (processInstance != null) {
+            dto.setBusinessKey(processInstance.getBusinessKey());
+        }
+
+        // 2. 查询流程定义 (获取流程名称和Key)
+        ProcessDefinition pd = repositoryService.createProcessDefinitionQuery()
+                .processDefinitionId(task.getProcessDefinitionId())
+                .singleResult();
+        if (pd != null) {
+            dto.setProcessName(pd.getName());
+            dto.setProcessCode(pd.getKey());
+        }
+
+        // 3. 查询历史流程实例 (获取发起人 ID)
+        HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery()
+                .processInstanceId(task.getProcessInstanceId())
+                .singleResult();
+
+        if (historicProcessInstance != null && historicProcessInstance.getStartUserId() != null) {
+            String initiatorId = historicProcessInstance.getStartUserId();
+            dto.setUserName(initiatorId);
+            // 4. 查询用户表 (获取发起人昵称)
+            // 注意：生产环境建议使用缓存，避免循环查库
+            UserEntity userEntity = userRepo.getByUsername(initiatorId);
+            if (userEntity != null) {
+                dto.setNickName(userEntity.getNickname());
+            } else {
+                dto.setNickName(initiatorId);
+            }
+        }
+
+        return dto;
     }
 
     /**

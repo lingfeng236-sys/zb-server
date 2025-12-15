@@ -1,7 +1,9 @@
 package com.lingfeng.camundastudy.convert;
 
+import com.lingfeng.camundastudy.domain.dto.user.LeaveRecordDto;
 import com.lingfeng.camundastudy.domain.dto.user.UserDto;
 import com.lingfeng.camundastudy.domain.dto.user.UserSaveDto;
+import com.lingfeng.camundastudy.domain.entity.LeaveRecordEntity;
 import com.lingfeng.camundastudy.domain.entity.UserEntity;
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
@@ -17,4 +19,6 @@ public interface UserConvert {
     UserDto userEntity2Dto(UserEntity userEntity);
 
     List<UserDto> userEntityList2DtoList(List<UserEntity> userEntityList);
+
+    LeaveRecordDto leaveRecordEntity2Dto(LeaveRecordEntity leaveRecordEntity);
 }
