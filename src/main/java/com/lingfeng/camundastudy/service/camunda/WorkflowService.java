@@ -7,6 +7,7 @@ import com.lingfeng.camundastudy.common.exception.BizException;
 import com.lingfeng.camundastudy.common.util.SecurityUtil;
 import com.lingfeng.camundastudy.common.util.StrUtils;
 import com.lingfeng.camundastudy.dao.repo.UserRepo;
+import com.lingfeng.camundastudy.domain.dto.camunda.ProcessDiagramDto;
 import com.lingfeng.camundastudy.domain.dto.camunda.TaskDto;
 import com.lingfeng.camundastudy.domain.entity.UserEntity;
 import jakarta.annotation.Resource;
@@ -14,6 +15,7 @@ import org.camunda.bpm.engine.HistoryService;
 import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.history.HistoricActivityInstance;
 import org.camunda.bpm.engine.history.HistoricProcessInstance;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
@@ -24,6 +26,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -190,5 +194,57 @@ public class WorkflowService {
     public void claimTask(String taskId) {
         String userId = SecurityUtil.getCurrentUsername();
         taskService.claim(taskId, userId);
+    }
+
+
+    /**
+     * 获取流程图数据（XML + 高亮节点）
+     */
+    public ProcessDiagramDto getProcessDiagram(String processInstanceId) {
+        // 1. 查询流程实例（可能是正在运行的，也可能是历史的）
+        HistoricProcessInstance instance = historyService.createHistoricProcessInstanceQuery()
+                .processInstanceId(processInstanceId)
+                .singleResult();
+
+        if (instance == null) {
+            throw new BizException(CommonStateCode.DATA_NOT_EXISTS);
+        }
+
+        // 2. 获取 BPMN XML
+        String processDefinitionId = instance.getProcessDefinitionId();
+        ProcessDefinition pd = repositoryService.createProcessDefinitionQuery()
+                .processDefinitionId(processDefinitionId)
+                .singleResult();
+
+        String xmlString;
+        try (InputStream resourceStream = repositoryService.getResourceAsStream(pd.getDeploymentId(), pd.getResourceName())) {
+            // 将流转换为字符串
+            xmlString = new String(resourceStream.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            throw new RuntimeException("读取流程文件失败", e);
+        }
+
+        // 3. 获取高亮节点（当前正在运行的）
+        List<String> activeActivityIds = new ArrayList<>();
+        // 如果流程未结束，查询 RuntimeService
+        if (instance.getEndTime() == null) {
+            activeActivityIds = runtimeService.getActiveActivityIds(processInstanceId);
+        }
+
+        // 4. 获取已完成的节点（历史轨迹）
+        List<HistoricActivityInstance> finishedList = historyService.createHistoricActivityInstanceQuery()
+                .processInstanceId(processInstanceId)
+                .finished()
+                .list();
+        List<String> finishedActivityIds = finishedList.stream()
+                .map(HistoricActivityInstance::getActivityId)
+                .distinct()
+                .collect(Collectors.toList());
+
+        return ProcessDiagramDto.builder()
+                .xml(xmlString)
+                .activeActivityIds(activeActivityIds)
+                .finishedActivityIds(finishedActivityIds)
+                .build();
     }
 }

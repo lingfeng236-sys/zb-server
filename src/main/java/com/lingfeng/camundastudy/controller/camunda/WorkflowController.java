@@ -2,6 +2,7 @@ package com.lingfeng.camundastudy.controller.camunda;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.lingfeng.camundastudy.common.domain.Result;
+import com.lingfeng.camundastudy.domain.dto.camunda.ProcessDiagramDto;
 import com.lingfeng.camundastudy.domain.dto.camunda.TaskDto;
 import com.lingfeng.camundastudy.service.camunda.WorkflowService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,5 +41,11 @@ public class WorkflowController {
     public Result<Void> claimTask(@PathVariable String taskId) {
         workflowService.claimTask(taskId);
         return Result.ok();
+    }
+
+    @GetMapping("/process/diagram/{processInstanceId}")
+    @Operation(summary = "获取流程图数据")
+    public Result<ProcessDiagramDto> getProcessDiagram(@PathVariable String processInstanceId) {
+        return Result.ok(workflowService.getProcessDiagram(processInstanceId));
     }
 }
