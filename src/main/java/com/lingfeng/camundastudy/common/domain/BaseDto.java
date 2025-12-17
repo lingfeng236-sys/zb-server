@@ -40,4 +40,5 @@ public class BaseDto implements Serializable {
 
     @Schema(description = "删除标志")
     private String delFlag;
+
 }
