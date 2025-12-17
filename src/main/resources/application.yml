@@ -70,8 +70,8 @@ logging:
 # JWT 配置
 jwt:
   secret: mySecretKeyForJwtTokenGenerationAndValidation123456789  # 至少32个字符
-  # Token有效期 一年
-  expiration: 31536000
+  # Token有效期 一年 (毫秒)
+  expiration: 31536000000
 # MyBatis-Plus 配置
 mybatis-plus:
   configuration:

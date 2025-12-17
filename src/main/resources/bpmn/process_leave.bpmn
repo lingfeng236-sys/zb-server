@@ -20,7 +20,7 @@
     <bpmn:sequenceFlow id="Flow_0xi6ilh" sourceRef="Gateway_1lqjw7y" targetRef="Activity_0z3w4g9">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${day &gt; 3}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:userTask id="Activity_0z3w4g9" name="经理审批" camunda:assignee="admin">
+    <bpmn:userTask id="Activity_0z3w4g9" name="经理审批" camunda:assignee="${approver}">
       <bpmn:incoming>Flow_0xi6ilh</bpmn:incoming>
       <bpmn:outgoing>Flow_17hfqk4</bpmn:outgoing>
     </bpmn:userTask>

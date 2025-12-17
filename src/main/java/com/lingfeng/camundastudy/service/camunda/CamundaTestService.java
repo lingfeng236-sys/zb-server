@@ -1,8 +1,10 @@
 package com.lingfeng.camundastudy.service.camunda;
 
+import com.lingfeng.camundastudy.common.util.SecurityUtil;
 import com.lingfeng.camundastudy.dao.repo.LeaveRecordRepo;
 import com.lingfeng.camundastudy.domain.entity.LeaveRecordEntity;
 import com.lingfeng.camundastudy.enums.ApprovalStatus;
+import com.lingfeng.camundastudy.enums.camunda.ProcessCodeEnum;
 import jakarta.annotation.Resource;
 import org.camunda.bpm.engine.HistoryService;
 import org.camunda.bpm.engine.RuntimeService;
@@ -24,7 +26,7 @@ public class CamundaTestService {
     private LeaveRecordRepo leaveRecordRepo;
 
     @Resource
-    private RuntimeService runtimeService;
+    private WorkflowService workflowService;
 
     public void searchHistory() {
         // 查询所有已经结束的、变量 applicant = "Bob" 的流程
@@ -58,9 +60,8 @@ public class CamundaTestService {
         // 2. 【后】启动流程，并绑定 BusinessKey
         Map<String, Object> variables = new HashMap<>();
         variables.put("day", day); // 用于网关判断
-
-        // 关键点：将 1001 传给 Camunda，从此这两个数据就绑定了！
-        runtimeService.startProcessInstanceByKey("process_leave", businessKey, variables);
+        variables.put("approver", SecurityUtil.getCurrentUsername());
+        workflowService.startProcess(ProcessCodeEnum.PROCESS_LEAVE.getCode(), businessKey, variables);
 
     }
 }

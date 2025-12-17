@@ -13,16 +13,16 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class UniversalEnumDeserializer extends JsonDeserializer<BaseCodeEnum> {
+public class UniversalEnumDeserializer extends JsonDeserializer<BaseCodeEnum<?>> {
 
-    private final Class<? extends BaseCodeEnum> enumType;
+    private final Class<? extends BaseCodeEnum<?>> enumType;
 
-    public UniversalEnumDeserializer(Class<? extends BaseCodeEnum> enumType) {
+    public UniversalEnumDeserializer(Class<? extends BaseCodeEnum<?>> enumType) {
         this.enumType = enumType;
     }
 
     @Override
-    public BaseCodeEnum deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public BaseCodeEnum<?> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         // 1. 读取当前 JSON 节点 (兼容 Object 和 Scalar)
         JsonNode node = p.getCodec().readTree(p);
 
@@ -53,7 +53,7 @@ public class UniversalEnumDeserializer extends JsonDeserializer<BaseCodeEnum> {
         // 这是原来的逻辑，优先匹配数据库存的值
         try {
             Integer codeInt = Integer.valueOf(source);
-            BaseCodeEnum match = Arrays.stream(enumType.getEnumConstants())
+            BaseCodeEnum<?> match = Arrays.stream(enumType.getEnumConstants())
                     .filter(e -> Objects.equals(e.getCode(), codeInt))
                     .findFirst()
                     .orElse(null);
@@ -67,7 +67,7 @@ public class UniversalEnumDeserializer extends JsonDeserializer<BaseCodeEnum> {
 
         // --- 匹配策略 2：尝试按 Enum Name 匹配 ---
         // 支持前端传 "MALE", "FEMALE"
-        for (BaseCodeEnum e : enumType.getEnumConstants()) {
+        for (BaseCodeEnum<?> e : enumType.getEnumConstants()) {
             // 强转回 Enum 类型以访问 name() 方法
             if (((Enum<?>) e).name().equalsIgnoreCase(source)) {
                 return e;

@@ -33,12 +33,16 @@ public enum CommonStateCode {
     LACK_LOCK_KEY_PARAMETER(4005,"缺少关键锁参数","Missing Lock Key Parameter"),
     ERROR_PARAM(500, "服务端错误:[#{param}]","Server error"),
 
-    // 用户相关功能 4500-5000
+    // 用户相关功能 4500-4999
     USER_NOT_EXIST(4500, "用户不存在"),
     USER_NOT_LOGIN(4501, "用户未登录"),
     USER_NOT_LOGOUT(4502, "用户未登出"),
     USER_PASSWORD_ERROR(4503, "旧密码错误"),
-    USER_ALREADY_EXIST(4504, "用户已存在")
+    USER_ALREADY_EXIST(4504, "用户已存在"),
+
+
+    // 流程相关 5000-6000
+    BUSINESS_KEY_NOT_EXIST(5000, "启动流程必须关联业务BusinessKey"),
     ;
 
     private final Integer code;

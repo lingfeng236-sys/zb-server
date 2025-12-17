@@ -8,6 +8,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.camunda.bpm.engine.IdentityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,6 +30,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Resource
     private UserDetailsService userDetailsService; // 也就是你在第二阶段写的那个 Service
+
+    @Resource
+    private IdentityService identityService; // 注入 Camunda 身份服务
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -70,6 +74,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             // ⚠️ 关键步骤：将认证信息存入 SecurityContext
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // 2. 【核心修改】告诉 Camunda 当前登录人是谁
+            try {
+                identityService.setAuthenticatedUserId(username);
+                // 继续执行过滤器链
+                filterChain.doFilter(request, response);
+            } finally {
+                // 3. 【务必清理】请求结束后清理线程变量，防止线程复用导致身份混淆
+                identityService.clearAuthentication();
+            }
+            return; // 这一步 return 很重要，避免下面重复调用 doFilter
         }
 
         // 6. 继续执行过滤器链
